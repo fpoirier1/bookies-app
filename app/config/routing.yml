@@ -1,0 +1,5 @@
+bookies_core:
+    resource: "@BookiesCoreBundle/Controller/"
+    type:     annotation
+    prefix:   /
+

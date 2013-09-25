@@ -19,7 +19,9 @@ framework:
     trusted_proxies: ~
     session:         ~
     fragments:       ~
-
+    serializer:
+        enabled: true
+        
 # Twig Configuration
 twig:
     debug:            %kernel.debug%
@@ -63,3 +65,15 @@ swiftmailer:
     username:  %mailer_user%
     password:  %mailer_password%
     spool:     { type: memory }
+
+services:
+   get_set_method_normalizer:
+      class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
+      tags:
+         - { name: serializer.normalizer }
+         
+fos_rest:
+  service:
+    serializer: serializer
+  serializer:
+      serialize_null: true
