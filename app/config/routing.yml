@@ -3,3 +3,7 @@ bookies_core:
     type:     annotation
     prefix:   /
 
+bookies_api_order:
+    type:     rest
+    resource: Bookies\CoreBundle\Controller\OrdersController
+    prefix: /api

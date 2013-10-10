@@ -73,7 +73,30 @@ services:
          - { name: serializer.normalizer }
          
 fos_rest:
+  view:
+      view_response_listener: false
+      failed_validation: HTTP_BAD_REQUEST
+      default_engine: php
+      formats:
+        json: true
+        xml: true
+        rss: false
+      
+  format_listener:
+    default_priorities: [json, xml, html]
+    fallback_format: json
+    prefer_extension: true
+        
+  body_listener:
+      decoders:
+          json: fos_rest.decoder.json
+            
+  param_fetcher_listener: true
+  allowed_methods_listener: true
+    
   service:
     serializer: serializer
   serializer:
       serialize_null: true
+  routing_loader:
+      default_format: json
