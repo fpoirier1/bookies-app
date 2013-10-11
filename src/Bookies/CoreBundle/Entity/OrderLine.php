@@ -3,12 +3,14 @@
 namespace Bookies\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * OrderLine
  *
  * @ORM\Table(name="bookies_order_line")
  * @ORM\Entity
+ * @Serializer\ExclusionPolicy("none")
  */
 class OrderLine
 {
@@ -18,6 +20,8 @@ class OrderLine
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * 
+     * @Serializer\Expose
      */
     private $id;
 
@@ -25,6 +29,8 @@ class OrderLine
      * @var integer
      *
      * @ORM\Column(name="quantity", type="integer")
+     * 
+     * @Serializer\Expose
      */
     private $quantity;
 
@@ -39,6 +45,8 @@ class OrderLine
      * @var Order $order
      * 
      * @ORM\ManyToOne(targetEntity="Order", inversedBy="lines", cascade={"persist"})
+     * 
+     * @Serializer\Exclude
      */
     private $order;
       

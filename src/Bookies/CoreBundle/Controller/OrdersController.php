@@ -26,7 +26,7 @@ class OrdersController extends Controller implements ClassResourceInterface
     private function getContext( $groups ){
         $context = new SerializationContext();
         $context->setVersion("0");
-        $context->setGroups($groups);
+        //$context->setGroups($groups);
         
         return $context;
     }

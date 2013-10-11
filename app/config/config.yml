@@ -74,6 +74,7 @@ services:
          
 fos_rest:
   view:
+      serialize_null: true
       view_response_listener: false
       failed_validation: HTTP_BAD_REQUEST
       default_engine: php

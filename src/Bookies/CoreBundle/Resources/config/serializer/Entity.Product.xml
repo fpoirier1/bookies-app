@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<serializer>  
-    <class name="Bookies\CoreBundle\Entity\Product">
-        <property name="id" type="integer" expose="true" groups="order" read-only="true"></property>
-        <property name="name" expose="true" groups="order" read-only="true"></property>
-
-    </class>
-</serializer>  

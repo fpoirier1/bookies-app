@@ -4,15 +4,17 @@ namespace Bookies\CoreBundle\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\ArrayCollection as ArrayCollection2;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Order
  *
  * @ORM\Table(name="bookies_order")
  * @ORM\Entity
+ * 
+ * @Serializer\ExclusionPolicy("none")
  */
 class Order
 {
@@ -22,6 +24,8 @@ class Order
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * 
+     * @Serializer\Expose()
      */
     private $id;
 
@@ -29,6 +33,7 @@ class Order
      * @var DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Serializer\Type("DateTime<'Y-m-d H:i:s'>")
      */
     private $createdAt;
 
@@ -36,6 +41,7 @@ class Order
      * @var string
      *
      * @ORM\Column(name="customer_name", type="string", length=255)
+     * 
      */
     private $customerName;
 
@@ -43,6 +49,7 @@ class Order
      * @var string
      *
      * @ORM\Column(name="customer_address", type="string", length=255)
+     * 
      */
     private $customerAddress;
 
@@ -50,11 +57,12 @@ class Order
      * @var string
      *
      * @ORM\Column(name="total", type="decimal", length=255)
+     * 
      */
     private $total;
     
     /**
-     * @var ArrayCollection2 $lines
+     * @var ArrayCollection $lines
      * 
      * @ORM\OneToMany(targetEntity="OrderLine", mappedBy="order", cascade={"persist", "remove"})
     */
