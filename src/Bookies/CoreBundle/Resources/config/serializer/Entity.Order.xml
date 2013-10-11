@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>  
+    <class name="Bookies\CoreBundle\Entity\Order">  
+        <property name="id" type="integer" expose="true" groups="order" read-only="true"></property>
+        <property name="customerName" type="string" expose="true" groups="order" read-only="true"></property>
+        <property name="customerAddress" type="string" expose="true" groups="order" read-only="true"></property>
+        <property name="createdAt" expose="true" groups="order" read-only="true"></property>
+        <property name="lines" expose="true" groups="order" read-only="true"></property>
+    </class>
+</serializer>  
