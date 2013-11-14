@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Bookies\CoreBundle\BookiesCoreBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
+            new Nelmio\CorsBundle\NelmioCorsBundle(),
             
         );
 

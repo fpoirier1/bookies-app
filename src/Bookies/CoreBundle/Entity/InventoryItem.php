@@ -6,13 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
- * OrderLine
+ * InventoryItem
  *
- * @ORM\Table(name="bookies_order_line")
+ * @ORM\Table(name="stock_inventory_line")
  * @ORM\Entity
  * @Serializer\ExclusionPolicy("none")
  */
-class OrderLine
+class InventoryItem
 {
     /**
      * @var integer
@@ -20,40 +20,27 @@ class OrderLine
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * 
-     * @Serializer\Expose
      */
     private $id;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="quantity", type="integer")
-     * 
-     * @Serializer\Expose
+     * @ORM\Column(name="product_qty", type="float", length=255)
      */
     private $quantity;
 
     /**
-     * @var float
-     *
-     * @ORM\Column(name="unit_cost", type="decimal")
+     * @var Inventory $inventory
+     * 
+     * @ORM\ManyToOne(targetEntity="Inventory", inversedBy="items")
+     * @Serializer\Exclude()
      */
-    private $unitCost;
-        
+    private $inventory;
+    
     /**
-     * @var Order $order
-     * 
-     * @ORM\ManyToOne(targetEntity="Order", inversedBy="lines", cascade={"persist"})
-     * 
-     * @Serializer\Exclude
-     */
-    private $order;
-      
-    /**
-     * @var Order $order
-     * 
-     * @ORM\ManyToOne(targetEntity="Product", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Product", inversedBy="inventoryItem")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
 
@@ -70,8 +57,8 @@ class OrderLine
     /**
      * Set quantity
      *
-     * @param integer $quantity
-     * @return OrderLine
+     * @param string $quantity
+     * @return InventoryItem
      */
     public function setQuantity($quantity)
     {
@@ -83,7 +70,7 @@ class OrderLine
     /**
      * Get quantity
      *
-     * @return integer 
+     * @return string 
      */
     public function getQuantity()
     {
@@ -91,56 +78,33 @@ class OrderLine
     }
 
     /**
-     * Set unitCost
+     * Set inventory
      *
-     * @param float $unitCost
-     * @return OrderLine
+     * @param \Bookies\CoreBundle\Entity\Inventory $inventory
+     * @return InventoryItem
      */
-    public function setUnitCost($unitCost)
+    public function setInventory(\Bookies\CoreBundle\Entity\Inventory $inventory = null)
     {
-        $this->unitCost = $unitCost;
+        $this->inventory = $inventory;
     
         return $this;
     }
 
     /**
-     * Get unitCost
+     * Get inventory
      *
-     * @return float 
+     * @return \Bookies\CoreBundle\Entity\Inventory 
      */
-    public function getUnitCost()
+    public function getInventory()
     {
-        return $this->unitCost;
-    }
-
-    /**
-     * Set order
-     *
-     * @param \Bookies\CoreBundle\Entity\Order $order
-     * @return OrderLine
-     */
-    public function setOrder(\Bookies\CoreBundle\Entity\Order $order = null)
-    {
-        $this->order = $order;
-    
-        return $this;
-    }
-
-    /**
-     * Get order
-     *
-     * @return \Bookies\CoreBundle\Entity\Order 
-     */
-    public function getOrder()
-    {
-        return $this->order;
+        return $this->inventory;
     }
 
     /**
      * Set product
      *
      * @param \Bookies\CoreBundle\Entity\Product $product
-     * @return OrderLine
+     * @return InventoryItem
      */
     public function setProduct(\Bookies\CoreBundle\Entity\Product $product = null)
     {

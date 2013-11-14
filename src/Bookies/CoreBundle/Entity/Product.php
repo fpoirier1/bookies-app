@@ -21,20 +21,38 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * 
-     * @Serializer\Expose()
      */
     private $id;
 
     /**
-     * @var string
+     * @var ProductTemplate
      *
-     * @ORM\Column(name="name_template", type="string", length=255)
+     * @ORM\OneToOne(targetEntity="ProductTemplate")
+     * @ORM\JoinColumn(name="product_tmpl_id", referencedColumnName="id")
+     * @Serializer\Exclude()
      * 
-     * @Serializer\Expose()
      */
-    private $name;
+    private $template;
+    
+    
+    /**
+     * @var InventoryItem
+     *
+     * @ORM\OneToOne(targetEntity="InventoryItem", mappedBy="product")
+     * @Serializer\Exclude()
+     * 
+     */
+    private $inventoryItem;
+        
+    /**
+     * @var rating
+     * 
+     * @ORM\OneToOne(targetEntity="Rating", mappedBy="product", cascade={"persist", "remove"})
+     * @Serializer\Exclude()
+     */
+    private $rating;
 
-
+    
     /**
      * Get id
      *
@@ -46,25 +64,153 @@ class Product
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     * @return Product
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    
-        return $this;
-    }
-
-    /**
      * Get name
+     *
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("name")
      *
      * @return string 
      */
     public function getName()
     {
-        return $this->name;
+        return $this->template->getName();
+    }
+
+    /**
+     * Get price
+     *
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("price")
+     *
+     * @return float 
+     */
+    public function getPrice()
+    {
+        return $this->template->getPrice();
+    }
+    
+    /**
+     * Get items
+     *
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("quantity")
+     * @return 
+     */
+    public function getQuantity(){
+        return $this->inventoryItem->getQuantity();
+    }
+
+    /**
+     * Get category
+     *
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("category")
+     *
+     * @return \Bookies\CoreBundle\Entity\Category 
+     */
+    public function getCategory()
+    {
+        return $this->template->getCategory();
+    }
+
+    /**
+     * Set template
+     *
+     * @param ProductTemplate $template
+     * @return Product
+     */
+    public function setTemplate(ProductTemplate $template = null)
+    {
+        $this->template = $template;
+    
+        return $this;
+    }
+
+    /**
+     * Get template
+     *
+     * @return ProductTemplate 
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * Set inventoryItem
+     *
+     * @param \Bookies\CoreBundle\Entity\InventoryItem $inventoryItem
+     * @return Product
+     */
+    public function setInventoryItem(\Bookies\CoreBundle\Entity\InventoryItem $inventoryItem = null)
+    {
+        $this->inventoryItem = $inventoryItem;
+    
+        return $this;
+    }
+
+    /**
+     * Get inventoryItem
+     *
+     * @return \Bookies\CoreBundle\Entity\InventoryItem 
+     */
+    public function getInventoryItem()
+    {
+        return $this->inventoryItem;
+    }
+
+    /**
+     * Set rating
+     *
+     * @param integer
+     * @return Product
+     */
+    public function addRating($score)
+    {
+        if( !$this->rating ){
+            $this->rating = new Rating();
+            $this->rating->setProduct($this);
+        }
+        
+        $this->rating->addScore( $score );
+    
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("rating")
+     * 
+     * @return \Bookies\CoreBundle\Entity\Rating 
+     */
+    public function getRating()
+    {
+        if( !$this->rating ){
+            $this->rating = new Rating();
+            $this->rating->setProduct($this);
+        }
+        
+        return $this->rating;
+    }
+    
+
+    /**
+     * Get rating
+     *
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("rating")
+     * 
+     * @return \Bookies\CoreBundle\Entity\Rating 
+     */
+    public function getRate()
+    {
+        if( !$this->rating ){
+            $this->rating = new Rating();
+            $this->rating->setProduct($this);
+        }
+        
+        return $this->rating->getRate();
     }
 }

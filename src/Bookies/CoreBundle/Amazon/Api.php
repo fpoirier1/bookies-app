@@ -1,6 +1,6 @@
 <?php
 
-namespace Amazon;
+namespace Bookies\CoreBundle\Amazon;
 
 use ApaiIO\Configuration\GenericConfiguration;
 use ApaiIO\Operations\Search;
@@ -9,7 +9,7 @@ use ApaiIO\ApaiIO;
 
 class Api
 {
-    protected static $apaiIO;
+    protected $apaiIO;
 
     
     public function __construct($country, $access_key, $secret_key, $associate_tag)

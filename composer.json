@@ -22,7 +22,8 @@
         "friendsofsymfony/rest-bundle": "0.13.1",
         "jms/serializer-bundle": "0.13.*@dev",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
-        "exeu/apai-io": "dev-master"
+        "exeu/apai-io": "dev-master",
+        "nelmio/cors-bundle": "~1.0"
     },
     "scripts": {
         "post-install-cmd": [
