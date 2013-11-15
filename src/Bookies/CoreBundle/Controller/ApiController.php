@@ -17,7 +17,7 @@ class ApiController extends Controller
     */
     public function ordersAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $orders = $em->getRepository("BookiesCoreBundle:Order")->findAll();
         
@@ -36,7 +36,7 @@ class ApiController extends Controller
     */
     public function categoriesAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $categories = $em->getRepository("BookiesCoreBundle:Category")->findAll();
         
@@ -55,7 +55,7 @@ class ApiController extends Controller
     */
     public function productsAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $inventory = $em->getRepository("BookiesCoreBundle:Inventory")->find( 1 );
         
@@ -73,7 +73,7 @@ class ApiController extends Controller
     */
     public function productAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         /**
          * @var Inventory $inventory
@@ -96,7 +96,7 @@ class ApiController extends Controller
     */
     public function rateProductAction($id, $score){
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         /**
          * @var Inventory $inventory

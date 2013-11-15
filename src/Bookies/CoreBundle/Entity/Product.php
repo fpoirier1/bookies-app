@@ -93,10 +93,13 @@ class Product
      * Get items
      *
      * @Serializer\VirtualProperty
-     * @Serializer\SerializedName("quantity")
+     * @Serializer\SerializedName("stock_quantity")
      * @return 
      */
     public function getQuantity(){
+        if( !$this->inventoryItem )
+            return null;
+        
         return $this->inventoryItem->getQuantity();
     }
 
