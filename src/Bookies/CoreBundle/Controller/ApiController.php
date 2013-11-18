@@ -6,8 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations\Get;
 use JMS\Serializer\SerializationContext;
-use Bookies\CoreBundle\Entity\Inventory;
-use Bookies\CoreBundle\Entity\Product;
 
 class ApiController extends Controller
 {
@@ -57,12 +55,15 @@ class ApiController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $inventory = $em->getRepository("BookiesCoreBundle:Inventory")->find( 1 );
+        $products = $em->getRepository("BookiesCoreBundle:Product")->createQueryBuilder('p')
+                    ->join('p.stockMove', 'sm')
+                    ->where("p.active = true")
+                    ->getQuery()->getResult();
         
         /* @var $view View */
         $view = View::create();
         $view->setStatusCode( 200 );
-        $view->setData( $inventory );        
+        $view->setData( $products );        
         $view->setSerializationContext( $this->getContext( array("product") ) );
         return $this->get( 'fos_rest.view_handler' )->handle( $view );
     }
@@ -75,12 +76,12 @@ class ApiController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        /**
-         * @var Inventory $inventory
-         */
-        $inventory = $em->getRepository("BookiesCoreBundle:Inventory")->find( 1 );
-        
-        $product = $this->findProduct($inventory, $id);
+        $product = $em->getRepository("BookiesCoreBundle:Product")->createQueryBuilder('p')
+                    ->join('p.stockMove', 'sm')
+                    ->where("p.active = true")
+                    ->andWhere("p.id = ?1")
+                     ->setParameter(1, $id)
+                    ->getQuery()->getOneorNullResult();
                 
         /* @var $view View */
         $view = View::create();
@@ -98,15 +99,13 @@ class ApiController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        /**
-         * @var Inventory $inventory
-         */
-        $inventory = $em->getRepository("BookiesCoreBundle:Inventory")->find( 1 );
-                
-        /**
-         * @var Product $product
-         */
-        $product = $this->findProduct($inventory, $id);
+        
+        $product = $em->getRepository("BookiesCoreBundle:Product")->createQueryBuilder('p')
+                    ->join('p.stockMove', 'sm')
+                    ->where("p.active = true")
+                    ->andWhere("p.id = ?1")
+                     ->setParameter(1, $id)
+                    ->getQuery()->getOneorNullResult();
         
         $product->addRating($score);
         
@@ -120,14 +119,7 @@ class ApiController extends Controller
         $view->setSerializationContext( $this->getContext( array("product") ) );
         return $this->get( 'fos_rest.view_handler' )->handle( $view );
     }
-    
-    private function findProduct( Inventory $inventory, $idProduct ){
-        foreach( $inventory->getItems() as $key=>$item){
-            if($item->getProduct()->getId() == $idProduct )
-                return $item->getProduct();
-        }
-    }
-    
+        
     private function getContext( $groups ){
         $context = new SerializationContext();
         $context->setVersion("0");

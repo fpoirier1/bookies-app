@@ -34,24 +34,27 @@ class Product
      */
     private $template;
     
-    
     /**
-     * @var InventoryItem
      *
-     * @ORM\OneToOne(targetEntity="InventoryItem", mappedBy="product")
+     * @ORM\OneToOne(targetEntity="StockMove", mappedBy="product")
      * @Serializer\Exclude()
-     * 
      */
-    private $inventoryItem;
-        
+    private $stockMove;
+            
     /**
      * @var rating
      * 
      * @ORM\OneToOne(targetEntity="Rating", mappedBy="product", cascade={"persist", "remove"})
-     * @Serializer\Exclude()
      */
     private $rating;
 
+    /**
+     *
+     * @var boolean
+     * 
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active;
     
     /**
      * Get id
@@ -75,6 +78,19 @@ class Product
     {
         return $this->template->getName();
     }
+    
+    /**
+     * Get name
+     *
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("description")
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->template->getDescription();
+    }
 
     /**
      * Get price
@@ -97,10 +113,10 @@ class Product
      * @return 
      */
     public function getQuantity(){
-        if( !$this->inventoryItem )
+        if( !$this->stockMove )
             return null;
-        
-        return $this->inventoryItem->getQuantity();
+
+        return $this->stockMove->getQuantity();
     }
 
     /**
@@ -139,28 +155,6 @@ class Product
         return $this->template;
     }
 
-    /**
-     * Set inventoryItem
-     *
-     * @param \Bookies\CoreBundle\Entity\InventoryItem $inventoryItem
-     * @return Product
-     */
-    public function setInventoryItem(\Bookies\CoreBundle\Entity\InventoryItem $inventoryItem = null)
-    {
-        $this->inventoryItem = $inventoryItem;
-    
-        return $this;
-    }
-
-    /**
-     * Get inventoryItem
-     *
-     * @return \Bookies\CoreBundle\Entity\InventoryItem 
-     */
-    public function getInventoryItem()
-    {
-        return $this->inventoryItem;
-    }
 
     /**
      * Set rating
@@ -215,5 +209,13 @@ class Product
         }
         
         return $this->rating->getRate();
+    }
+    
+    public function isActive(){
+        return $this->active;
+    }
+    
+    public function getStockMove(){
+        return $this->stockMove;
     }
 }

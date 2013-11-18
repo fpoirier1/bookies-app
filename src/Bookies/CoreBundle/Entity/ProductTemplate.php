@@ -39,12 +39,21 @@ class ProductTemplate
     private $price;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string")
+     */
+    private $description;
+    
+    
+    /**
      * @var Category
      * 
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
      * @ORM\JoinColumn(name="categ_id", referencedColumnName="id")
      */
     private $category;
+    
 
     public function __construct()
     {
@@ -128,5 +137,28 @@ class ProductTemplate
     public function getCategory()
     {
         return $this->category;
+    }
+    
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return string
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }
