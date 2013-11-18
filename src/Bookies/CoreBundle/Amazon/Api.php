@@ -4,6 +4,7 @@ namespace Bookies\CoreBundle\Amazon;
 
 use ApaiIO\Configuration\GenericConfiguration;
 use ApaiIO\Operations\Search;
+use ApaiIO\Operations\SimilarityLookup;
 use ApaiIO\ApaiIO;
 
 
@@ -38,6 +39,15 @@ class Api
         return $this->runOperation($search);
     }
     
+    public function similarityLookup($id)
+    {
+        $search = new SimilarityLookup();
+        $search->setItemId($id);
+        $search->setSort('salesrank');
+        $search->setResponseGroup(array('Small', 'Images'));
+        return $this->runOperation($search);
+    }
+    
     protected function createSearch()
     {
         $search = new Search();
@@ -52,8 +62,18 @@ class Api
         $formattedResponse = $this->apaiIO->runOperation($op);
         $xml = @simplexml_load_string($formattedResponse);
         $json = json_encode($xml);
-        $json = json_decode($json, true);
-        return $json;
+        $r = json_decode($json, true);
+        
+        if (isset($r['Items']['TotalResults'])) {
+            if ($r['Items']['TotalResults'] == 0) {
+                $r['Items']['Item'] = array();
+            }
+            else if ($r['Items']['TotalResults'] == 1) {
+                $r['Items']['Item'] = array($r['Items']['Item']);
+            }
+        }
+        
+        return $r;
     }
 }
 
