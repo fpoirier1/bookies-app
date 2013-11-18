@@ -45,6 +45,15 @@ class ProductTemplate
      * @ORM\JoinColumn(name="categ_id", referencedColumnName="id")
      */
     private $category;
+    
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="description", type="string")
+     */
+    private $raw_description;
+    private $description = null;
+    private $author = null;
 
     public function __construct()
     {
@@ -128,5 +137,47 @@ class ProductTemplate
     public function getCategory()
     {
         return $this->category;
+    }
+    
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        if ($this->description === null) {
+            $this->parseDescription();
+        }
+        return $this->description;
+    }
+    
+    /**
+     * Get author
+     *
+     * @return string
+     */
+    public function getAuthor()
+    {
+        if ($this->author === null) {
+            $this->parseDescription();
+        }
+        return $this->author;
+    }
+    
+    protected function parseDescription()
+    {
+        $pattern = '/^Author:(.*?)\*Description:(.*)/';
+        $matches = array();
+        $r = preg_match($pattern , $this->raw_description, $matches);
+        if ($r) {
+            $this->author = trim($matches[1]);
+            $this->description = trim($matches[2]);
+        }
+        else {
+            $this->author = "Unknown";
+            $this->description = "No description available";
+        }
     }
 }

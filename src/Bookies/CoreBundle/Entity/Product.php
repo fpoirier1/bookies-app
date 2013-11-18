@@ -216,4 +216,32 @@ class Product
         
         return $this->rating->getRate();
     }
+    
+    
+    /**
+     * Get description
+     *
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("description")
+     * 
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->template->getDescription();
+    }
+    
+    
+    /**
+     * Get author
+     *
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("author")
+     * 
+     * @return string
+     */
+    public function getAuthor()
+    {
+        return $this->template->getAuthor();
+    }
 }
