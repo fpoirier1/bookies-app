@@ -11,32 +11,25 @@ use JMS\Serializer\SerializationContext;
 class AmazonController extends Controller
 {
     /**
-    * @Get("/{slug}")
+    * @Get("/{author}/{title}", defaults={"title" = null}))
     */
-    public function amazonAction($slug = null)
+    public function amazonAction($author, $title)
     {
         $api = new Api(
-        'com',
-        'AKIAI7W62SHCNT2IJPOQ',
-        'ak4YyfFGY8fT+ZxiZq1iEaxU8vNn5iwCtukJ9xm0',
-        'testapi0f-20');
-
-        $author = $slug;
+            'com',
+            'AKIAI7W62SHCNT2IJPOQ',
+            'ak4YyfFGY8fT+ZxiZq1iEaxU8vNn5iwCtukJ9xm0',
+            'testapi0f-20');
         
-        $r = $api->searchByAuthor($author);
+        $r = array();
         
-        /*echo "result for $author" . PHP_EOL;
-        foreach($r['Items']['Item'] as $itm) {
-            echo $itm['ItemAttributes']['ProductGroup'] . ' ' . $itm['ItemAttributes']['Title'] . "\n";
+        $api_r = $api->searchByAuthor($author);
+        $r = array_merge($r, $api_r['Items']['Item']);
+        
+        if ($title) {
+            $api_r = $api->searchByTitle($title);
+            $r = array_merge($r, $api_r['Items']['Item']);
         }
-
-        $title = "The House of Hades";
-        $r = $api->searchByTitle($title);
-        echo "result for $title" . PHP_EOL;
-        foreach($r['Items']['Item'] as $itm) {
-            echo $itm['ItemAttributes']['ProductGroup'] . ' ' . $itm['ItemAttributes']['Title'] . "\n";
-        }*/
-
 
         /* @var $view View */
         $view = View::create();

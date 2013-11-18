@@ -52,8 +52,16 @@ class Api
         $formattedResponse = $this->apaiIO->runOperation($op);
         $xml = @simplexml_load_string($formattedResponse);
         $json = json_encode($xml);
-        $json = json_decode($json, true);
-        return $json;
+        $r = json_decode($json, true);
+        
+        if ($r['Items']['TotalResults'] == 0) {
+            $r['Items']['Item'] = array();
+        }
+        else if ($r['Items']['TotalResults'] == 1) {
+            $r['Items']['Item'] = array($r['Items']['Item']);
+        }
+        
+        return $r;
     }
 }
 
