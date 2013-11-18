@@ -38,6 +38,14 @@ class Category
      * @Serializer\Exclude()
      */
     private $products;
+        
+    /**
+     * @var boolean
+     * 
+     * @ORM\Column(name="active", type="boolean")
+     * @Serializer\Exclude()
+     */
+    private $active;
 
     public function __construct()
     {
@@ -108,5 +116,10 @@ class Category
     public function getProducts()
     {
         return $this->products;
+    }
+    
+    public function isActive()
+    {
+        return $this->active;
     }
 }

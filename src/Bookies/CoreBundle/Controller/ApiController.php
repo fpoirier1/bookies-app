@@ -57,7 +57,11 @@ class ApiController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $inventory = $em->getRepository("BookiesCoreBundle:Inventory")->find( 1 );
+        $inventory = $em->getRepository("BookiesCoreBundle:Product")->findAll();
+        
+        $inventory = array_filter($inventory, function(Product $p) {
+            return $p->getCategory()->isActive();
+        });
         
         /* @var $view View */
         $view = View::create();
