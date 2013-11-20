@@ -74,10 +74,10 @@ class OrderController extends Controller
         $entity = new Order();
         $form   = $this->createForm(new OrderType(), $entity);
 
-        return array(
+        return $this->render( 'BookiesCoreBundle:Order:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
-        );
+        ));
     }
 
     /**

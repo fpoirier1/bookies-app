@@ -11,11 +11,14 @@ class OrderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('createdAt')
             ->add('customerName')
-            ->add('customerFirstname')
             ->add('customerAddress')
-            ->add('total')
+            ->add('total')                
+            ->add('lines', 'collection', array(
+                'type' => new OrderLineType(),
+                'allow_add' => true,
+                'by_reference' => false)
+            )
         ;
     }
 
@@ -28,6 +31,6 @@ class OrderType extends AbstractType
 
     public function getName()
     {
-        return 'bookies_corebundle_ordertype';
+        return 'order';
     }
 }

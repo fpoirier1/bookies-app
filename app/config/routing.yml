@@ -1,8 +1,13 @@
-#bookies_core:
-#    resource: "@BookiesCoreBundle/Controller/"
-#    type:     annotation
-#    prefix:   /
+bookies_order:
+    resource: Bookies\CoreBundle\Controller\OrderController
+    type:     annotation
+    prefix:   /
 
+bookies_orderline:
+    resource: Bookies\CoreBundle\Controller\OrderLineController
+    type:     annotation
+    prefix:   /
+    
 bookies_api_order:
     type:     rest
     resource: Bookies\CoreBundle\Controller\ApiController

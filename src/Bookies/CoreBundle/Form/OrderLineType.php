@@ -11,9 +11,9 @@ class OrderLineType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('product')
             ->add('quantity')
             ->add('unitCost')
-            ->add('order')
         ;
     }
 
@@ -26,6 +26,6 @@ class OrderLineType extends AbstractType
 
     public function getName()
     {
-        return 'bookies_corebundle_orderlinetype';
+        return 'orderline';
     }
 }

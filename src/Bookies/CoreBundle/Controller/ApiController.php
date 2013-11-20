@@ -2,9 +2,11 @@
 
 namespace Bookies\CoreBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\Post;
 use JMS\Serializer\SerializationContext;
 
 class ApiController extends Controller
@@ -24,6 +26,38 @@ class ApiController extends Controller
         $view->setStatusCode( 200 );
         $view->setData( $orders );        
         $view->setSerializationContext( $this->getContext( array("order") ) );
+        return $this->get( 'fos_rest.view_handler' )->handle( $view );
+    }
+    
+    /**
+    * POST Order
+    * @Post("/order")
+    */
+    public function orderAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $order  = new Order();
+        $form = $this->createForm(new OrderType(), $order);
+        $form->bind($request);
+
+        /* @var $view View */
+        $view = View::create();
+        $view->setSerializationContext( $this->getContext( array("order") ) );
+        $view->setStatusCode( 400 );
+        
+        if ( $form->isValid() ) {
+            // Aller chercher pour chaque produit le cout 
+            // Faire baisser la quantité
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($order);
+            $em->flush();
+
+            $view->setStatusCode( 200 );
+            $view->setData( $order );    
+        }
+            
         return $this->get( 'fos_rest.view_handler' )->handle( $view );
     }
     

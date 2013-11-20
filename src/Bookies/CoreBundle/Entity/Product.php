@@ -232,4 +232,8 @@ class Product
     {
         return $this->template->getAuthor();
     }
+    
+    public function __toString() {
+        return $this->getName();
+    }
 }
