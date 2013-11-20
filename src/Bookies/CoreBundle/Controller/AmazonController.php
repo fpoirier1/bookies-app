@@ -20,10 +20,9 @@ class AmazonController extends Controller
     }
     
     /**
-    * @Get("/{author}", defaults={"title" = null}))
-    * @Get("/{author}/{title}", defaults={"title" = null}))
+    * @Get("/search/{author}/{title}", defaults={"title" = null}))
     */
-    public function searchAction($author, $title = null)
+    public function searchAction($author, $title)
     {
         $api = $this->getApi();
         
