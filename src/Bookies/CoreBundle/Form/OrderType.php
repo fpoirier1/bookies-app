@@ -25,7 +25,8 @@ class OrderType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Bookies\CoreBundle\Entity\Order'
+            'data_class' => 'Bookies\CoreBundle\Entity\Order',
+            'csrf_protection' => false
         ));
     }
 

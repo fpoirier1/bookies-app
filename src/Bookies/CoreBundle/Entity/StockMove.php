@@ -59,7 +59,7 @@ class StockMove
      * @return StockMove
      */
     public function setQuantity( $value ){
-        $this->quantity -= $value;
+        $this->quantity = $value;
         
         return $this;
     }

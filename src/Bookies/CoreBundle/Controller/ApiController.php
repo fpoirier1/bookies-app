@@ -8,6 +8,8 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use JMS\Serializer\SerializationContext;
+use Bookies\CoreBundle\Entity\Order;
+use Bookies\CoreBundle\Form\OrderType;
 
 class ApiController extends Controller
 {
@@ -47,15 +49,51 @@ class ApiController extends Controller
         $view->setStatusCode( 400 );
         
         if ( $form->isValid() ) {
-            // Aller chercher pour chaque produit le cout 
-            // Faire baisser la quantité
             
             $em = $this->getDoctrine()->getManager();
+            
+            $total = 0;
+            
+            if( $order->getLines()->count() <= 0  )
+                throw new \Exception( 'Une commande doit comporter au moins un article.');
+            
+            foreach( $order->getLines() as $line){
+                $line->setOrder($order);
+                
+                /**
+                 * Augmenter le total
+                 * @var \Bookies\CoreBundle\Entity\Product
+                 */
+                $product = $line->getProduct();
+                $total += $product->getPrice();
+                
+                /**
+                 * Faire baisser l'inventaire
+                 * @var \Bookies\CoreBundle\Entity\StockMove
+                 */
+                $stockMove = $em->getRepository("BookiesCoreBundle:StockMove")->findOneBy(
+                    array( "product" => $product )
+                );
+                
+                $quantity = $stockMove->getQuantity();
+                if( $quantity < $line->getQuantity()  )
+                    throw new \Exception( 'Not enough books left for '. $product->getName() );
+                
+                $stockMove->setQuantity($quantity - $line->getQuantity());
+                
+                $em->flush();
+                                
+            }
+            
+            $order->setTotal($total);
+            
             $em->persist($order);
             $em->flush();
 
             $view->setStatusCode( 200 );
             $view->setData( $order );    
+        }else{
+            $view->setData($form);
         }
             
         return $this->get( 'fos_rest.view_handler' )->handle( $view );

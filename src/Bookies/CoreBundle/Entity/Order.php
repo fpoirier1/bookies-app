@@ -23,7 +23,7 @@ class Order
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      * 
      * @Serializer\Expose()
      */
@@ -64,7 +64,7 @@ class Order
     /**
      * @var ArrayCollection $lines
      * 
-     * @ORM\OneToMany(targetEntity="OrderLine", mappedBy="order", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="OrderLine", mappedBy="order", cascade={"ALL"}, orphanRemoval=true)
     */
     private $lines;
     
@@ -211,7 +211,7 @@ class Order
     public function addLine(\Bookies\CoreBundle\Entity\OrderLine $lines)
     {
         $this->lines[] = $lines;
-    
+        
         return $this;
     }
 
