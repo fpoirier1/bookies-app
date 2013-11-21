@@ -13,7 +13,6 @@ class OrderType extends AbstractType
         $builder
             ->add('customerName')
             ->add('customerAddress')
-            ->add('total')                
             ->add('lines', 'collection', array(
                 'type' => new OrderLineType(),
                 'allow_add' => true,

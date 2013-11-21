@@ -108,7 +108,7 @@ class ApiController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $categories = $em->getRepository("BookiesCoreBundle:Category")->findAll();
+        $categories = $em->getRepository("BookiesCoreBundle:Category")->findBy(array("active" => true));
         
         /* @var $view View */
         $view = View::create();
